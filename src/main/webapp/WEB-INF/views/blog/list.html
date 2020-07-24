@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog list</title>
+    <style>
+        table td p{
+            /*border: 1px solid #cc0000;*/
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 500px;
+        }
+    </style>
+</head>
+<body>
+<h3>
+    Welcome !
+    <div sec:authorize="isAuthenticated()">
+        <span sec:authentication="principal.username"></span>
+    </div>
+</h3>
+
+<h1>Blogs</h1>
+
+<!--<div sec:authorize="isAnonymous()">-->
+<!--<a th:href="@{/login}">Login</a>-->
+<!--</div>-->
+
+
+<th:block th:if="${success}">
+    <p style="color: blue" th:text="${success}"></p>
+</th:block>
+
+<!--<div sec:authorize="isFullyAuthenticated()()">-->
+
+    <a href="/blogs/create">Create new Blog</a>
+
+<form>
+    Search by author or category:
+    <input name="s" type="text"/>
+    <input type="submit" value="Search"/>
+</form><br/>
+
+<table border="1">
+    <tr>
+        <th>Author</th>
+        <th>Content</th>
+        <th>Category</th>
+        <th>Create Time</th>
+        <th>View</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    <th:block th:each="blog : ${blogs}">
+        <tr>
+            <td th:text="${blog.getAuthor()}"></td>
+            <td><p th:text="${blog.getContent()}"></p></td>
+            <td th:text="${blog.category.name}"></td>
+            <td th:text="${blog.getCreatedAt()}"></td>
+            <td><a th:href="@{/blogs/view/__${blog.id}__}">View</a></td>
+            <td><a th:href="@{/blogs/edit/__${blog.id}__}">Edit</a></td>
+            <td><a th:href="@{/blogs/delete/__${blog.id}__}">Delete</a></td>
+        </tr>
+    </th:block>
+</table>
+
+<div>
+    <a th:href="@{'/blogs'(s=${keyword},page=${blogs.number - 1})}" th:if="${blogs.hasPrevious()}">Previous</a>
+    <span th:text="${blogs.number + 1}"></span>/<span th:text="${blogs.totalPages}"></span>
+    <a th:href="@{'/blogs'(s=${keyword},page=${blogs.number + 1})}" th:if="${blogs.hasNext()}">Next</a>
+</div>
+
+<!--</div>-->
+
+<div sec:authorize="isAuthenticated()">
+    <a th:href="@{/logout}">Logout</a>
+</div>
+</body>
+</html>

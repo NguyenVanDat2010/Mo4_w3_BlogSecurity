@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Update blog</title>
+</head>
+<body>
+<h1>Update blog</h1>
+<div sec:authorize="isAuthenticated()">
+    <a href="/blogs">Blog list</a>
+</div>
+
+<!--<div sec:authorize="isAuthenticated()">-->
+
+<form th:action="@{/blogs/edit}" th:object="${blog}" method="post">
+    <table>
+        <input th:type="hidden" name="id" th:field="*{id}">
+        <tr>
+            <td>Author:</td>
+            <td><input type="text" th:field="*{author}"/></td>
+        </tr>
+        <tr>
+            <td>Content:</td>
+            <td><textarea style="width: 500px; height: 150px;" type="text" th:field="*{content}"></textarea></td>
+        </tr>
+        <tr>
+            <td>Category:</td>
+            <td>
+                <select name="category">
+                    <option th:each="c: ${categories}" th:value="${c.id}" th:text="${c.name}" th:selected="(${c.id}==*{category.id})"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Save customer"></td>
+        </tr>
+    </table>
+</form>
+
+<!--</div>-->
+
+<div sec:authorize="isAuthenticated()">
+    <a th:href="@{/logout}">Logout</a>
+</div>
+</body>
+</html>

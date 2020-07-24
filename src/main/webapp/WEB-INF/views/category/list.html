@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Category List</title>
+</head>
+<body>
+<h1>Categories</h1>
+<!--<th:block th:if="${success}">-->
+<!--    <p style="color: blue" th:text="${success}"></p>-->
+<!--</th:block>-->
+
+<form>
+    Search by first name:
+    <input name="s" type="text"/>
+    <input type="submit" value="Search"/>
+</form><br/>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    <th:block th:each="carogory : ${categories}">
+        <tr>
+            <td th:text="${carogory.name}"></td>
+            <td><a th:href="@{/categories/edit/__${carogory.id}__ }">Edit</a></td>
+            <td><a th:href="@{categories/delete/__${carogory.id}__ }">Delete</a></td>
+        </tr>
+    </th:block>
+</table>
+<br><br>
+</body>
+</html>
